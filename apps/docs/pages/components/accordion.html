@@ -14,15 +14,15 @@ keywords: collapse, disclosure
           <div class="docs-demo__stage">
             <div class="luz-accordion">
               <details name="acc-demo" open>
-                <summary>What is a design token?</summary>
+                <summary><span>What is a design token?</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
                 <p>A named value, such as a color or a space, that components read instead of a literal.</p>
               </details>
               <details name="acc-demo">
-                <summary>Why only one open at a time?</summary>
+                <summary><span>Why only one open at a time?</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
                 <p>The same <code>name</code> on each details connects them: opening one closes the other.</p>
               </details>
               <details name="acc-demo">
-                <summary>Does it need JavaScript?</summary>
+                <summary><span>Does it need JavaScript?</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
                 <p>No. The browser opens, closes and groups them.</p>
               </details>
             </div>
@@ -50,7 +50,7 @@ keywords: collapse, disclosure
   &lt;p&gt;A named value that components read.&lt;/p&gt;
 &lt;/details&gt;</code></pre>
             </div>
-            <p><code>.luz-accordion</code> adds the box and the group. With the class:</p>
+            <p><code>.luz-accordion</code> adds the box and the group. With the class (each <code>…</code> is the Chevron end or Chevron down SVG of the <a href="/docs/components/icons/">Icons page</a>):</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -58,11 +58,11 @@ keywords: collapse, disclosure
               </div>
               <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Accordion markup"><code id="code-accordion">&lt;div class=&quot;luz-accordion&quot;&gt;
   &lt;details name=&quot;faq&quot; open&gt;
-    &lt;summary&gt;What is a design token?&lt;/summary&gt;
+    &lt;summary&gt;&lt;span&gt;What is a design token?&lt;/span&gt;&lt;svg class=&quot;luz-accordion__end&quot; data-luz-flip aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;&lt;svg class=&quot;luz-accordion__down&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;&lt;/summary&gt;
     &lt;p&gt;A named value that components read.&lt;/p&gt;
   &lt;/details&gt;
   &lt;details name=&quot;faq&quot;&gt;
-    &lt;summary&gt;Does it need JavaScript?&lt;/summary&gt;
+    &lt;summary&gt;&lt;span&gt;Does it need JavaScript?&lt;/span&gt;&lt;svg class=&quot;luz-accordion__end&quot; data-luz-flip aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;&lt;svg class=&quot;luz-accordion__down&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;&lt;/summary&gt;
     &lt;p&gt;No.&lt;/p&gt;
   &lt;/details&gt;
 &lt;/div&gt;</code></pre>
@@ -76,26 +76,30 @@ keywords: collapse, disclosure
                 </thead>
                 <tbody>
                   <tr><td data-label="Class or attribute"><div><code>.luz-accordion</code></div></td><td data-label="What it does"><div>Joins the <code>&lt;details&gt;</code> inside it into one block: one edge between them, rounded corners only on the block</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>.luz-accordion__end</code></div></td><td data-label="What it does"><div>The Chevron end glyph, shown while closed. <code>data-luz-flip</code> mirrors it in right-to-left text</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>.luz-accordion__down</code></div></td><td data-label="What it does"><div>The Chevron down glyph, shown while open</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>name="…"</code></div></td><td data-label="What it does"><div>Connects the details with the same name: only one is open at a time. They need not be adjacent</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>open</code></div></td><td data-label="What it does"><div>Starts a panel open. In a named group, only the first <code>open</code> one in the source stays open</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>Native <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code>, styled by <code>elements/interactive.css</code> with no class. <code>components/accordion.css</code> adds only the joined block.</p>
+            <p>Native <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code>, styled by <code>elements/interactive.css</code> with no class. <code>components/accordion.css</code> adds the joined block and the chevron.</p>
             <p>No JavaScript.</p>
             <ul>
               <li>The summary is the label of the panel; the rest of the details is its content.</li>
               <li>Closed content is not shown and is out of the reading order until the panel opens.</li>
+              <li>A summary may hold the two glyphs after its text, at the end of the row. Only then is the browser's marker hidden: without them, and in a bare <code>details</code>, it stays.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
-            <p>Nothing changes: opening, closing and grouping are the browser's. The accordion is complete without a script.</p>
+            <p>Nothing changes: opening, closing and grouping are the browser's. The accordion is complete without a script. The chevron is CSS too.</p>
             <h3 id="keyboard">Keyboard and ARIA</h3>
             <p>Tab reaches each summary in order. Enter or Space opens or closes it.</p>
             <p>There are no arrow-key shortcuts between panels.</p>
             <ul>
               <li>Add no role: a <code>&lt;details&gt;</code> already has its semantics, and no ARIA role is allowed on it.</li>
               <li>Keep links and buttons out of the summary: it is itself the control.</li>
+              <li>The glyphs are decorative (<code>aria-hidden="true"</code>): the <code>&lt;details&gt;</code> element itself holds the state.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
           </div>
@@ -120,8 +124,8 @@ keywords: collapse, disclosure
                 <figcaption><strong class="luz-do-dont__verdict">Do</strong> Give each summary a short title that says what the panel answers.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="luz-accordion">
-                    <details><summary>How do I reset my password?</summary><p>Use the link on the sign-in page.</p></details>
-                    <details><summary>Where are my invoices?</summary><p>Under Billing.</p></details>
+                    <details><summary><span>How do I reset my password?</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><p>Use the link on the sign-in page.</p></details>
+                    <details><summary><span>Where are my invoices?</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><p>Under Billing.</p></details>
                   </div>
                 </div>
               </figure>
@@ -129,7 +133,7 @@ keywords: collapse, disclosure
                 <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Use a whole sentence of context as the title: it hides the point and wraps.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="luz-accordion">
-                    <details><summary>In case you have forgotten the password you chose when you signed up, here is what to do</summary><p>Use the link on the sign-in page.</p></details>
+                    <details><summary><span>In case you have forgotten the password you chose when you signed up, here is what to do</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><p>Use the link on the sign-in page.</p></details>
                   </div>
                 </div>
               </figure>
@@ -141,7 +145,7 @@ keywords: collapse, disclosure
               <li>Order the panels as readers ask: most common first.</li>
             </ul>
             <h3 id="contrast">Contrast and focus</h3>
-            <p>The text and the marker use the primary text color on the surface.</p>
+            <p>The text, the marker and the chevron use the primary text color on the surface.</p>
             <div class="luz-table-wrap" role="region" aria-label="Accordion contrast in each mode" tabindex="0">
               <table class="luz-table docs-contrast">
                 <thead>
@@ -151,13 +155,14 @@ keywords: collapse, disclosure
                   <tr><td data-label="Part"><div>Summary text</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Part"><div>Summary under the pointer</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>14.4:1</div></td><td data-label="Dark"><div>12.6:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>5.9:1</div></td><td data-label="Dark"><div>7.2:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Chevron</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
                 </tbody>
               </table>
             </div>
             <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
             <ul>
               <li><strong>Focus:</strong> the summary has the shared 2 px <code>--luz-focus-ring</code> outline, 2 px outside the box.</li>
-              <li><strong>Not colour alone:</strong> open and closed are told apart by the marker, which turns, and not by the border or the background.</li>
+              <li><strong>Not colour alone:</strong> open and closed are told apart by the marker, which turns, or by the chevron, which points down when open, and not by the border or the background.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
             <p>The 6 tokens that <code>components/accordion.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>

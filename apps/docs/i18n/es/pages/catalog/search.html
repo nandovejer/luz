@@ -2,7 +2,7 @@
 title: Búsqueda
 description: Permite encontrar por su nombre una página, sección o elemento HTML del sitio, mediante un botón de la cabecera.
 fits: cuando el sitio tiene más páginas de las que se pueden recorrer a simple vista
-source: 3dfbbb30acb5
+source: 14ab44259bb9
 reviewed: false
 -->
     <div class="docs-component" id="p-search">
@@ -79,7 +79,7 @@ reviewed: false
             <p>Todas las opciones se indican en el marcado: son clases o atributos.</p>
             <ul>
               <li><code>.luz-search__trigger--compact</code>: a 768 px o menos, el activador solo muestra la lupa, en un espacio de 44 por 44 px, igual que el enlace contiguo; sus nombres se mantienen, aunque recortados, no se eliminan. Añade a ambos un <code>&lt;svg class=&quot;luz-search__trigger-icon&quot;&gt;</code>.</li>
-              <li>Se puede usar más de un activador: todos los <code>[data-luz-search-open]</code> de la página abren el diálogo, estén dentro del elemento o no (este sitio tiene uno en la cabecera y otro en la portada de la documentación). Los que estén fuera permanecen ocultos hasta que funcione la búsqueda y no ocupan espacio: colócalos donde su aparición no desplace nada, por ejemplo, al final de una sección.</li>
+              <li>Se puede usar más de un activador: todos los <code>[data-luz-search-open]</code> de la página abren el diálogo, estén dentro del elemento o no. Los que estén fuera permanecen ocultos hasta que funcione la búsqueda y no ocupan espacio: colócalos donde su aparición no desplace nada, por ejemplo, al final de una sección.</li>
               <li>Un elemento con <code>data-luz-search-show=&quot;idle&quot;</code> dentro de <code>[data-luz-search-results]</code> se muestra mientras el campo está vacío, por ejemplo, con una lista breve de páginas populares; uno con <code>data-luz-search-show=&quot;none&quot;</code> se muestra cuando no hay coincidencias.</li>
               <li>Omite <code>[data-luz-search-list]</code> para no incluir ese grupo.</li>
               <li>Los textos que escribe el script son los atributos <code>data-luz-label-*</code> del diálogo: <code>results</code>, <code>result</code>, <code>capped</code>, <code>none</code>, <code>loading</code> y <code>error</code>, con <code>{n}</code>, <code>{shown}</code> y <code>{query}</code>. <code>data-luz-label-idle</code> es el texto que muestra el estado mientras el campo está vacío, por ejemplo, «Escribe para buscar en la documentación». Si falta una etiqueta, no se escribe nada.</li>
