@@ -29,6 +29,7 @@ import "/packages/catalog/dist/cookie-consent.js";
 import { initSiteChrome } from "/apps/site/header.js";
 import { initPromptDialogs } from "/apps/site/prompt-dialog.js";
 import { initDocsView } from "./view.js";
+import { initPrintPreview } from "./print-preview.js";
 
 // Defines <luz-embed>, for the live example of the Embed page, only where there is one
 if (document.querySelector("luz-embed")) import("/packages/catalog/dist/embed.js");
@@ -583,6 +584,8 @@ initDocsView();
 initTabs();
 initModals();
 initSnippetPicker();
+// The Print styles page: the button that opens the preview, from a <template> of the page
+initPrintPreview();
 // Before the outputs: it binds the ranges of the demo it clones in
 initSizesDemo();
 initRangeOutputs();
