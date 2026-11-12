@@ -83,6 +83,20 @@ function settled(target) {
   });
 }
 
+/**
+ * Resolves when a <link> in the sample has loaded, or failed. WebKit sends no load or error event for a <link> in a
+ * frame whose scripts are sandboxed, so its sheet (null until it has loaded) is also polled, for a few seconds.
+ */
+function linked(link) {
+  return new Promise((resolve) => {
+    link.addEventListener("load", resolve, { once: true });
+    link.addEventListener("error", resolve, { once: true });
+    const started = Date.now();
+    const poll = () => (link.sheet || Date.now() - started > 8000 ? resolve() : setTimeout(poll, 25));
+    poll();
+  });
+}
+
 /** The sample has no <link>: it takes the stylesheets of the page that opened it. */
 async function linkSheets(doc) {
   const links = [...document.querySelectorAll('link[rel~="stylesheet"]')].map((own) => {
@@ -92,7 +106,7 @@ async function linkSheets(doc) {
     if (own.media) link.media = own.media;
     return link;
   });
-  const loaded = links.map(settled);
+  const loaded = links.map(linked);
   doc.head.append(...links);
   await Promise.all(loaded);
 }
