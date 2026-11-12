@@ -12,6 +12,7 @@
  * Vite client in dev, and Chromium logs a blocked script for the sandbox: console noise is not asserted.
  * Run with: pnpm exec playwright test tests/docs-print-preview.spec.js --project=chromium --project=chromium-nojs
  */
+/* global EventTarget, HTMLLinkElement -- these run in the sample's frame, inside page.addInitScript() */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
@@ -85,6 +86,28 @@ for (const lang of LANGS) {
       await expect(dialog).toHaveAttribute('open', '');
       await expect(page.getByRole('dialog', { name: lang.dialog })).toBeVisible();
       expect(await page.evaluate(() => !!document.activeElement?.closest('dialog#print-preview'))).toBe(true);
+    });
+
+    test('the preview is ready and has the print look when the sample\'s stylesheets send no load or error event', async ({ page }) => {
+      // WebKit sends neither event for a <link> in a frame whose scripts are sandboxed, though the sheet loads. The
+      // init script runs in the sample's frame too (not in the page): there it makes a <link> ignore the two listeners.
+      await page.addInitScript(() => {
+        if (window === window.top) return;
+        const add = EventTarget.prototype.addEventListener;
+        EventTarget.prototype.addEventListener = function (type, ...rest) {
+          if ((type === 'load' || type === 'error') && this instanceof HTMLLinkElement) return;
+          return add.call(this, type, ...rest);
+        };
+      });
+      const { dialog } = await open(page, lang);
+      await expect(dialog.getByRole('status')).toHaveText(lang.ready);
+      const print = await inFrame(page, () => ({
+        background: getComputedStyle(document.body).backgroundColor,
+        nav: [...document.querySelectorAll('nav')].map((n) => getComputedStyle(n).display),
+      }));
+      expect(print.background).toBe('rgb(255, 255, 255)');
+      expect(print.nav.length).toBeGreaterThan(0);
+      for (const d of print.nav) expect(d).toBe('none');
     });
 
     test('the frame is a labelled, sandboxed, inert picture of a page', async ({ page }) => {
