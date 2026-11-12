@@ -105,7 +105,7 @@ keywords: dark mode, mode switcher, light and dark
               <li><strong>In a sidebar</strong> it takes the colours of catalog's <a href="/docs/catalog/sidebar/">sidebar</a>; elsewhere on a dark surface, set the <code>--luz-theme-mode-*</code> properties.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
-            <p>The four radios show where the markup puts them; there is no button. Choosing one changes the mode, because the tokens read the checked radio (<code>:root:has()</code>), until <code>&lt;html&gt;</code> has a <code>data-mode</code>. It works for a <a href="/docs/tokens/themes/">brand theme</a> too, if its <code>_template.css</code> is current. The choice is not remembered, and Auto follows the system: dark under <code>prefers-color-scheme: dark</code>, high contrast under <code>prefers-contrast: more</code>, light otherwise.</p>
+            <p>The four radios show where the markup puts them; there is no button. Choosing one changes the mode, because the tokens read the checked radio (<code>:root:has()</code>), until <code>&lt;html&gt;</code> has a <code>data-mode</code>. It works for a <a href="/docs/tokens/themes/">brand theme</a> too, if its <code>_template.css</code> is current. The choice is not remembered, and Auto follows the system, as above.</p>
             <h3 id="keyboard">Keyboard and ARIA</h3>
             <ul>
               <li><strong>Button:</strong> Tab reaches it; Enter or Space moves to the next mode. Focus follows the markup, not the corner.</li>

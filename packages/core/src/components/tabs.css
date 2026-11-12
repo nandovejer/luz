@@ -9,11 +9,10 @@
 .luz-tabs {
   font-family: var(--luz-font-sans); /* UI text: never the body serif */
   display: flex;
-  border-bottom: 2px solid var(--luz-divider);
-  margin-bottom: var(--luz-space-md);
+  border-block-end: 2px solid var(--luz-divider);
+  margin-block-end: var(--luz-space-md);
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
-  -webkit-overflow-scrolling: touch;
 }
 
 .luz-tabs::-webkit-scrollbar {
@@ -29,7 +28,7 @@
   cursor: pointer;
   /* Inside the row, above its 2px rule: the row scrolls (overflow-x), so a
      border pulled over the rule with a negative margin would be clipped */
-  border-bottom: 2px solid transparent;
+  border-block-end: 2px solid transparent;
   transition: color var(--luz-duration-fast),
     border-color var(--luz-duration-fast);
   white-space: nowrap;
@@ -72,7 +71,7 @@
 
 .luz-tab.is-active {
   color: var(--luz-brand-primary);
-  border-bottom-color: var(--luz-brand-primary);
+  border-block-end-color: var(--luz-brand-primary);
   font-weight: 600;
 }
 
@@ -117,10 +116,10 @@
    underline, in Highlight (with its weight, the cue is not colour alone). */
 @media (forced-colors: active) {
   .luz-tab {
-    border-bottom-color: Canvas;
+    border-block-end-color: Canvas;
   }
 
   .luz-tab.is-active {
-    border-bottom-color: Highlight;
+    border-block-end-color: Highlight;
   }
 }

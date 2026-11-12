@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ accordion with the disclosure chevron</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <style>
+    body { padding: 80px; }
+  </style>
+</head>
+<body>
+  <main id="page">
+    <h1>Accordion with a chevron</h1>
+
+    <!-- A summary that holds the two glyphs of the Icons page: __end closed, __down open -->
+    <div id="acc" class="luz-accordion">
+      <details id="item-1" name="faq">
+        <summary id="sum-1"><span id="text-1">What is LUZ?</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <p>A design system in plain HTML and CSS.</p>
+      </details>
+      <details id="item-2" name="faq">
+        <summary id="sum-2"><span>Does it need JavaScript?</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <p>No: the details element opens by itself.</p>
+      </details>
+      <details id="item-3" name="faq">
+        <summary id="sum-3"><span>Is it free?</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <p>MIT.</p>
+      </details>
+    </div>
+
+    <!-- Without the glyph: every accordion that exists today keeps its native marker -->
+    <div id="acc-plain" class="luz-accordion">
+      <details id="plain-item"><summary id="plain-sum">Plain question</summary><p>Plain answer.</p></details>
+    </div>
+
+    <!-- A bare details -->
+    <details id="bare"><summary id="bare-sum">Bare question</summary><p>Bare answer.</p></details>
+  </main>
+</body>
+</html>

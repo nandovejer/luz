@@ -87,7 +87,7 @@
   height: var(--luz-control-lg);
   background: var(--luz-input-bg);
   border: none;
-  border-bottom: 1px solid var(--luz-input-border);
+  border-block-end: 1px solid var(--luz-input-border);
   color: var(--luz-text-primary);
   font-family: var(--luz-font-sans);
   font-size: var(--luz-text-control);
@@ -107,7 +107,7 @@
 }
 
 :where(:is(textarea, input:is(:not([type]), [type="text"], [type="email"], [type="password"], [type="search"], [type="tel"], [type="url"], [type="number"], [type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"])):not([class*="luz-"]):focus, .luz-input:focus) {
-  border-bottom: 2px solid var(--luz-focus-ring);
+  border-block-end: 2px solid var(--luz-focus-ring);
 }
 
 :where(:is(textarea, input:is(:not([type]), [type="text"], [type="email"], [type="password"], [type="search"], [type="tel"], [type="url"], [type="number"], [type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"])):not([class*="luz-"]):focus-visible, .luz-input:focus-visible) {
@@ -116,18 +116,18 @@
 }
 
 :where(:is(textarea, input:is(:not([type]), [type="text"], [type="email"], [type="password"], [type="search"], [type="tel"], [type="url"], [type="number"], [type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"])):not([class*="luz-"])[aria-invalid="true"]) {
-  border-bottom: 2px solid var(--luz-color-danger);
+  border-block-end: 2px solid var(--luz-color-danger);
 }
 
 :where(:is(textarea, input:is(:not([type]), [type="text"], [type="email"], [type="password"], [type="search"], [type="tel"], [type="url"], [type="number"], [type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"])):not([class*="luz-"]):disabled, .luz-input:disabled) {
   color: var(--luz-text-disabled);
-  border-bottom-style: dashed;
+  border-block-end-style: dashed;
   cursor: not-allowed;
 }
 
 :where(:is(textarea, input:is(:not([type]), [type="text"], [type="email"], [type="password"], [type="search"], [type="tel"], [type="url"], [type="number"], [type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"])):not([class*="luz-"])[readonly], .luz-input[readonly]) {
   opacity: 0.7;
-  border-bottom-style: dashed;
+  border-block-end-style: dashed;
 }
 
 /* The colour scheme of the date and time pickers and of the open list of a

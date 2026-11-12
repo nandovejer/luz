@@ -26,9 +26,9 @@
 
 /* Modal content structure */
 .luz-modal__header {
-  margin-bottom: var(--luz-space-lg);
-  padding-bottom: var(--luz-space-sm);
-  border-bottom: 1px solid var(--luz-divider);
+  margin-block-end: var(--luz-space-lg);
+  padding-block-end: var(--luz-space-sm);
+  border-block-end: 1px solid var(--luz-divider);
 }
 
 .luz-modal__title {
@@ -64,7 +64,7 @@
 }
 
 .luz-modal__body {
-  margin-bottom: var(--luz-space-lg);
+  margin-block-end: var(--luz-space-lg);
   color: var(--luz-text-primary);
   line-height: 1.6;
 }
@@ -73,8 +73,8 @@
   display: flex;
   gap: var(--luz-space-sm);
   justify-content: flex-end;
-  padding-top: var(--luz-space-sm);
-  border-top: 1px solid var(--luz-divider);
+  padding-block-start: var(--luz-space-sm);
+  border-block-start: 1px solid var(--luz-divider);
 }
 
 @keyframes luz-fade-in {
@@ -108,7 +108,6 @@
     box-sizing: border-box;
     inline-size: 100%;
     max-inline-size: none;
-    block-size: 100vh;
     block-size: 100dvh;
     max-block-size: none;
     margin: 0;
@@ -148,7 +147,6 @@
     padding-block: max(var(--luz-space-xs), env(safe-area-inset-top)) var(--luz-space-xs);
     padding-inline: var(--luz-modal-pad-inline) max(var(--luz-space-xs), env(safe-area-inset-right));
     background: var(--luz-surface);
-    border-bottom: 1px solid var(--luz-divider);
   }
 
   .luz-modal__title {

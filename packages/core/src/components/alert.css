@@ -12,7 +12,7 @@
   padding: var(--luz-space-sm) var(--luz-space-md);
   border-inline-start: 3px solid;
   border-radius: var(--luz-radius-md);
-  margin-bottom: var(--luz-space-sm);
+  margin-block-end: var(--luz-space-sm);
   transition: background var(--luz-duration-base);
 }
 
@@ -25,7 +25,7 @@
 .luz-alert__title {
   font-size: var(--luz-text-md);
   font-weight: 600;
-  margin-bottom: var(--luz-space-3xs);
+  margin-block-end: var(--luz-space-3xs);
 }
 
 .luz-alert__body {
@@ -50,19 +50,15 @@
   border-color: var(--luz-color-danger);
 }
 
-.luz-alert--info .luz-alert__icon,
-.luz-alert--info .luz-alert__title {
+.luz-alert--info :is(.luz-alert__icon, .luz-alert__title) {
   color: var(--luz-color-info);
 }
-.luz-alert--success .luz-alert__icon,
-.luz-alert--success .luz-alert__title {
+.luz-alert--success :is(.luz-alert__icon, .luz-alert__title) {
   color: var(--luz-color-success);
 }
-.luz-alert--warning .luz-alert__icon,
-.luz-alert--warning .luz-alert__title {
+.luz-alert--warning :is(.luz-alert__icon, .luz-alert__title) {
   color: var(--luz-color-warning);
 }
-.luz-alert--error .luz-alert__icon,
-.luz-alert--error .luz-alert__title {
+.luz-alert--error :is(.luz-alert__icon, .luz-alert__title) {
   color: var(--luz-color-danger);
 }
