@@ -2,7 +2,7 @@
 title: Gráfico de columnas
 description: Compara unos pocos valores como columnas de una misma escala de altura, dibujadas desde una tabla nativa que conserva cada cifra como texto.
 fits: un informe que compara unos pocos valores con un orden, como días o meses
-source: 24aa3928af48
+source: b5220a80c834
 reviewed: false
 -->
     <div class="docs-component" id="p-column-chart">
@@ -106,10 +106,10 @@ reviewed: false
               <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Column chart markup"><code id="code-column-chart">&lt;table class=&quot;luz-column-chart&quot;&gt;
   &lt;caption&gt;Parcels per day, this week&lt;/caption&gt;
   &lt;thead&gt;
-    &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Mon&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Tue&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Wed&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Thu&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Mon&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Tue&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Wed&lt;/th&gt;&lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
-    &lt;tr&gt;&lt;td style=&quot;--v: .8&quot;&gt;1,204&lt;/td&gt;&lt;td style=&quot;--v: .55&quot;&gt;830&lt;/td&gt;&lt;td style=&quot;--v: .6&quot;&gt;901&lt;/td&gt;&lt;td style=&quot;--v: .95&quot;&gt;1,420&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td style=&quot;--v: .8&quot;&gt;1,204&lt;/td&gt;&lt;td style=&quot;--v: .55&quot;&gt;830&lt;/td&gt;&lt;td style=&quot;--v: .6&quot;&gt;901&lt;/td&gt;&lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;</code></pre>
             </div>
@@ -137,16 +137,15 @@ reviewed: false
                 <button class="luz-copy-btn" type="button" data-copy-from="code-column-chart-interactive" aria-label="Copiar el marcado del gráfico de columnas interactivo">Copiar</button>
               </div>
               <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Marcado del gráfico de columnas interactivo"><code id="code-column-chart-interactive">&lt;luz-chart type=&quot;column&quot; interactive&gt;
-  &lt;div class=&quot;luz-table-wrap&quot; role=&quot;region&quot; aria-label=&quot;Visitors per day, April 1 to 3&quot; tabindex=&quot;0&quot;&gt;
+  &lt;div class=&quot;luz-table-wrap&quot; role=&quot;region&quot; aria-label=&quot;Visitors per day, April 1 and 2&quot; tabindex=&quot;0&quot;&gt;
     &lt;table&gt;
-      &lt;caption&gt;Visitors per day, April 1 to 3&lt;/caption&gt;
+      &lt;caption&gt;Visitors per day, April 1 and 2&lt;/caption&gt;
       &lt;thead&gt;
         &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Day&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Desktop&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Mobile&lt;/th&gt;&lt;/tr&gt;
       &lt;/thead&gt;
       &lt;tbody&gt;
         &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 1&lt;/th&gt;&lt;td style=&quot;--v: .5&quot;&gt;&lt;data value=&quot;252&quot;&gt;252&lt;/data&gt;&lt;/td&gt;&lt;td style=&quot;--v: .3&quot;&gt;&lt;data value=&quot;148&quot;&gt;148&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
         &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 2&lt;/th&gt;&lt;td style=&quot;--v: .54&quot;&gt;&lt;data value=&quot;271&quot;&gt;271&lt;/data&gt;&lt;/td&gt;&lt;td style=&quot;--v: .55&quot;&gt;&lt;data value=&quot;276&quot;&gt;276&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
-        &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 3&lt;/th&gt;&lt;td style=&quot;--v: .36&quot;&gt;&lt;data value=&quot;182&quot;&gt;182&lt;/data&gt;&lt;/td&gt;&lt;td style=&quot;--v: .26&quot;&gt;&lt;data value=&quot;128&quot;&gt;128&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
       &lt;/tbody&gt;
     &lt;/table&gt;
   &lt;/div&gt;
@@ -174,7 +173,7 @@ reviewed: false
             <p>Calcula <code>--v</code> como el valor entre el máximo de la escala, el mismo para todas las celdas. El <code>style</code> en línea solo da ese valor. Con un <code>style-src</code> estricto, ponlo en una regla propia, como <code>.sat { --v: .25 }</code>.</p>
             <p>Con el tamaño de texto por defecto, hasta siete columnas, o tres grupos de dos, caben en una pantalla de 320 px. Si hay más, o con un texto mayor, mete la tabla en un <code>luz-table-wrap</code>: se desplaza dentro de él.</p>
             <p>La cifra de cada celda está sobre su columna y el nombre debajo, como en un eje. Con varias series, cada fila es un grupo de columnas, separadas por <code>--luz-column-chart-gap</code> (en el gráfico solo con CSS), y la fila de encabezado es la leyenda: el nombre de cada serie tras un punto de su color.</p>
-            <p>Dentro de <code>&lt;luz-chart type="column" interactive&gt;</code>, el script añade una cabecera sobre la tabla: un botón por serie, su nombre y la suma de sus cifras, escrita con el idioma de la página. Una suma sirve para recuentos e importes, como visitantes o euros; no sirve para tasas, proporciones ni medias, cuyo total no dice nada: no uses <code>interactive</code> para ellas, o déjalas fuera. El título de la tabla pasa a ser el título del gráfico. Las columnas pierden su pista: el día bajo el puntero o el foco recibe una banda clara, y las cifras salen de las columnas a una lectura a su lado. Las columnas conservan la escala de su <code>--v</code> cuando se apaga una serie, y la última serie mostrada no se puede apagar. El script no escribe ninguna palabra propia: los nombres, las cifras y el título son tuyos.</p>
+            <p>Dentro de <code>&lt;luz-chart type="column" interactive&gt;</code>, el script añade una cabecera sobre la tabla: un botón por serie, su nombre y la suma de sus cifras, escrita con el idioma de la página. Una suma sirve para recuentos e importes, como visitantes o euros, no para tasas, proporciones ni medias. El título de la tabla pasa a ser el título del gráfico. Las columnas pierden su pista: el día bajo el puntero o el foco recibe una banda clara, y las cifras salen de las columnas a una lectura a su lado. Las columnas conservan la escala de su <code>--v</code> cuando se apaga una serie, y la última serie mostrada no se puede apagar. El script no escribe ninguna palabra propia: los nombres, las cifras y el título son tuyos.</p>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>No lo necesita. Sin la hoja de estilos se lee como una tabla: una fila de encabezado con los nombres y luego las cifras. El gráfico interactivo es, sin su script, una tabla simple: una fila por día con todas sus cifras, que cabe en la pantalla más estrecha. Una tabla de pocas categorías que deba ser de columnas sin script lleva ella misma la clase <code>luz-column-chart</code>.</p>
             <h3 id="keyboard">Teclado y ARIA</h3>

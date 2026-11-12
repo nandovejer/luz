@@ -71,21 +71,18 @@
   color: var(--luz-text-on-fill);
 }
 
-.luz-btn--ghost {
+.luz-btn--ghost,
+.luz-btn--outline {
   background: transparent;
   color: var(--luz-brand-primary);
 }
-.luz-btn--ghost:hover {
+.luz-btn--ghost:hover,
+.luz-btn--outline:hover {
   background: var(--luz-brand-subtle);
 }
 
 .luz-btn--outline {
-  background: transparent;
-  color: var(--luz-brand-primary);
   border-color: var(--luz-brand-primary);
-}
-.luz-btn--outline:hover {
-  background: var(--luz-brand-subtle);
 }
 
 .luz-btn--danger {

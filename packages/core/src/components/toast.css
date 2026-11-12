@@ -28,7 +28,7 @@
 .luz-toast__kind {
   font-size: var(--luz-text-xs);
   font-family: var(--luz-font-mono);
-  margin-bottom: var(--luz-space-3xs);
+  margin-block-end: var(--luz-space-3xs);
   color: var(--luz-text-secondary);
 }
 

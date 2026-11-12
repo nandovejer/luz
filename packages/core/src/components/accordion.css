@@ -28,3 +28,24 @@
   border-end-start-radius: var(--luz-radius-md);
   border-end-end-radius: var(--luz-radius-md);
 }
+
+/* Disclosure chevron: the summary holds both Icons-page glyphs, __end (closed,
+   mirrors in right-to-left through data-luz-flip) and __down (open); the
+   native marker is hidden only in a summary that holds the glyph, so a
+   summary without it keeps its marker */
+.luz-accordion > details > summary:has(.luz-accordion__end) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--luz-space-xs);
+  list-style: none;
+}
+
+.luz-accordion > details > summary:has(.luz-accordion__end)::-webkit-details-marker {
+  display: none;
+}
+
+.luz-accordion > details:not([open]) .luz-accordion__down,
+.luz-accordion > details[open] .luz-accordion__end {
+  display: none;
+}

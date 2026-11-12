@@ -10,7 +10,11 @@ A row is closed only when **both** browsers have reviewed it: remove it from "Op
 
 One row is one `needs-browser-review` issue: the issue repeats the Scope, the Files and what to look at, and says which browser is missing. The `security-auditor` agent reads this section, those issues and the maintainer's private list before it gives an OK; it gives none while a row in its scope is open. On 2026-10-29 the owner allowed both reviews (Playwright's Firefox 155 and WebKit 26.6 on Linux: neither is a real Safari or a device) and the seven rows that were waiting are in "Closed". On 2026-10-30 the owner allowed both reviews again (Playwright's Firefox 155 and WebKit 26 on Linux: neither is a real Safari or a device) and the six rows of the 0.3.0 batch are in "Closed". On 2026-11-05 the owner allowed both reviews of nine rows the pre-release audit found had never had one: they are in "Closed". Nothing is waiting. A row a later change adds goes in this table, checked in Chromium (and in Chromium with JavaScript off) only.
 
-No row is open.
+Nothing was waiting before 2026-11-11. One row is waiting now:
+
+| Scope | Files | What to look at | Browser |
+|---|---|---|---|
+| The accordion chevron and a lighter core stylesheet (`accordion.css`; logical properties and removed fallbacks in the other `packages/core/src/components/*.css` and `elements/*.css`) | `packages/core/src/components/accordion.css`, `alert.css`, `button.css`, `figure.css`, `form.css`, `modal.css`, `table.css`, `tabs.css`, `toast.css`, `packages/core/src/elements/forms.css`, `interactive.css`, `tables.css`, `text.css`, `tests/accordion-chevron.spec.js` | The chevron: `list-style: none` and `::-webkit-details-marker` really hide the marker on a summary that is `display: flex` (WebKit has had bugs here), `summary:has(.luz-accordion__end)`, the glyph at the end of the row in LTR and RTL with `data-luz-flip` mirrored, one glyph at a time, VoiceOver still announcing the details as expanded or collapsed; an accordion with no glyphs keeps its marker. The lighter stylesheet: the full-screen modal on a phone with `100dvh` and no `100vh` line, the scroll of the tabs strip and of the table wrap without `-webkit-overflow-scrolling` (iOS 13 and later), the underline of text fields and selects (`border-block-end`), and the alert, button, toast and figure spacing | Safari and Firefox |
 
 ## Closed
 
