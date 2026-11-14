@@ -41,6 +41,10 @@
   list-style: none;
 }
 
+.luz-accordion > details > summary:has(.luz-accordion__end) > svg {
+  flex: none;
+}
+
 .luz-accordion > details > summary:has(.luz-accordion__end)::-webkit-details-marker {
   display: none;
 }

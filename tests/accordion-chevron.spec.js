@@ -138,6 +138,34 @@ test.describe('the chevron of an accordion summary', () => {
   });
 });
 
+test.describe('the glyph of a summary that wraps', () => {
+  for (const dir of ['ltr', 'rtl']) {
+    test(`${dir}, at 320 px: the glyph of a two-line summary is as wide as that of a one-line one, closed and open`, async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 800 });
+      await open(page, { dir });
+      const measure = (id) =>
+        page.evaluate((i) => {
+          const sum = /** @type {Element} */ (document.querySelector(`#${i}-sum`));
+          const visible = /** @type {Element} */ ([...sum.querySelectorAll('svg')].find((el) => getComputedStyle(el).display !== 'none'));
+          const g = visible.getBoundingClientRect();
+          return { glyph: g.width, glyphHeight: g.height, summary: sum.getBoundingClientRect().height, lineHeight: Number.parseFloat(getComputedStyle(sum).lineHeight) || 0 };
+        }, id);
+      for (const state of ['closed', 'open']) {
+        if (state === 'open') {
+          await page.locator('#short-sum').click();
+          await page.locator('#long-sum').click();
+        }
+        const short = await measure('short');
+        const long = await measure('long');
+        expect(long.summary, `${state}: the long summary wraps onto more than one line`).toBeGreaterThan(short.summary * 1.5);
+        expect(long.glyph, `${state}: the glyph of the wrapped summary keeps its width`).toBeCloseTo(short.glyph, 0);
+        expect(Math.abs(long.glyph - short.glyph), `${state}: width within 0.5 px`).toBeLessThanOrEqual(0.5);
+        expect(Math.abs(long.glyphHeight - short.glyphHeight), `${state}: height within 0.5 px`).toBeLessThanOrEqual(0.5);
+      }
+    });
+  }
+});
+
 test.describe('a summary without the glyph keeps its marker', () => {
   for (const id of ['#plain-sum', '#bare-sum']) {
     test(`${id} is not a row and shows its native marker, closed and open`, async ({ page }) => {

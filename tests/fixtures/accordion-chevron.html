@@ -30,6 +30,12 @@
       </details>
     </div>
 
+    <!-- A short and a long question in one accordion: at a narrow viewport the long one wraps, and its glyph must keep its size -->
+    <div id="acc-wrap" class="luz-accordion">
+      <details id="short-item"><summary id="short-sum"><span>Is it free?</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><p>MIT.</p></details>
+      <details id="long-item"><summary id="long-sum"><span>Which browsers does the design system support, and what happens in an older browser that does not know a newer feature of CSS?</span><svg class="luz-accordion__end" data-luz-flip aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><svg class="luz-accordion__down" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><p>The current ones; an older browser gets the plain HTML.</p></details>
+    </div>
+
     <!-- Without the glyph: every accordion that exists today keeps its native marker -->
     <div id="acc-plain" class="luz-accordion">
       <details id="plain-item"><summary id="plain-sum">Plain question</summary><p>Plain answer.</p></details>
